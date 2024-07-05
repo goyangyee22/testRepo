@@ -1,9 +1,9 @@
 import "./App.css";
 import "./HandIcon.css";
-import { useState } from "react";
+import HandIcon from "./HandIcon";
 import reset from "./assets/ic-reset.svg";
 import HandButton from "./HandButton";
-import HandIcon from "./HandIcon";
+import { useState } from "react";
 import { compareHand, generateRandomHand } from "./utils";
 
 function getResult(comparison) {
@@ -29,7 +29,7 @@ function App() {
     const comparison = compareHand(value, nextOtherHand);
     setIsWin(comparison);
     if (comparison > 0) setScore(score + bet);
-    if (comparison < 0) setScore(otherScore + bet);
+    if (comparison < 0) setOtherScore(otherScore + bet);
     const result = getResult(comparison);
     setGameHistory([...gameHistory, result]);
   };
