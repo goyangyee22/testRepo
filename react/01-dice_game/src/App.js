@@ -1,18 +1,31 @@
-import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import New from "./pages/New";
+import { useState } from "react";
+import Board from "./Board";
+
+function random(n) {
+  return Math.ceil(Math.random() * n);
+}
 
 function App() {
+  const [gameHistory, setGameHistory] = useState([]);
+  const [otherGameHistory, setOtherGameHistory] = useState([]);
+
+  const handleRollClick = () => {
+    const nextMyNum = random(6);
+    const nextOtherNum = random(6);
+
+    setGameHistory([...gameHistory, nextMyNum]);
+    setOtherGameHistory([...otherGameHistory, nextOtherNum]);
+  };
+
+  const handleClearClick = () => {
+    setGameHistory([]);
+    setOtherGameHistory([]);
+  };
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/">
-          <Route index element={<Home />} />
-          <Route path="new" element={<New />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <div>
+      <Board name="나" color="blue" gameHistory={gameHistory} />
+      <Board name="상대" color="red" gameHistory={otherGameHistory} />
+    </div>
   );
 }
 
