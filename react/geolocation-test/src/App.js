@@ -51,13 +51,14 @@ function App() {
 
   return (
     <div className="App">
-      <h1>현재 위치</h1>
+      <h1>DW 아카데미 갤러리</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
       {position.lat && position.lon ? (
         <div>
+          {/* <p>위도: {position.lat}</p> */}
+          {/* <p>경도: {position.lon}</p> */}
           <p>
-            위도: {position.lat}
-            <p>경도: {position.lon}</p>
+            작성자: ㅇㅇ({position.lat.toFixed(0)}.{position.lon.toFixed(0)})
           </p>
         </div>
       ) : (
