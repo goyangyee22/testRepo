@@ -40,9 +40,10 @@ function App() {
               {
                 label: "Data Values",
                 data: values,
+                fill: false,
                 backgroundColor: "rgba(75, 192, 192, 0.2)",
                 borderColor: "rgba(75, 192, 192, 1)",
-                borderWidth: 1,
+                borderWidth: 2,
               },
             ],
           });
@@ -68,10 +69,33 @@ function App() {
                 legend: {
                   position: "top",
                 },
-                title: {
-                  display: true,
-                  text: "Data Visualization",
+                tooltip: {
+                  callbacks: {
+                    label: (context) => {
+                      const label = context.dataset.label || "";
+                      const value = context.raw || 0;
+                      return `${label}: ${value}`;
+                    },
+                  },
                 },
+              },
+              scales: {
+                x: {
+                  title: {
+                    display: true,
+                    text: "x축",
+                  },
+                },
+                y: {
+                  title: {
+                    display: true,
+                    text: "y축",
+                  },
+                },
+              },
+              title: {
+                display: true,
+                text: "Data Visualization",
               },
             }}
           />
