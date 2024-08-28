@@ -4,9 +4,11 @@ import "./App.css";
 
 function App() {
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-    const xmlData = `<service>
+    const xmlData = `
+    <service>
         <srchKncrList1>
           <item>
             <sKncrNm1>전체</sKncrNm1>
@@ -41,7 +43,8 @@ function App() {
             <sKncrCode1>WP</sKncrCode1>
           </item>
         </srchKncrList1>
-      </service>`;
+      </service>
+      `;
 
     parseString(xmlData, (err, result) => {
       if (err) {
@@ -49,28 +52,36 @@ function App() {
         return;
       }
       // JSON 데이터에서 카테고리 추출
-      try {
-        const items = result.service.srchKncrList1[0].item;
-        const categories = items.map((item) => ({
-          name: item.sKncrNm1[0],
-          code: item.sKncrCode1[0] || "",
-        }));
-        setCategories(categories);
-      } catch (error) {
-        console.error("Error processing parsed XML data:", error);
-      }
+
+      const items = result.service.srchKncrList1[0].item;
+      const categories = items.map((item) => ({
+        name: item.sKncrNm1[0],
+        code: item.sKncrCode1[0] || "",
+      }));
+      setCategories(categories);
     });
   }, []);
+
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+  };
   return (
     <div className="App">
       <h2>농작물 카테고리</h2>
-      <select>
+      <div>
         {categories.map((category, index) => (
-          <option key={index} value={category.code}>
+          <button key={index} onClick={() => handleCategoryClick(category)}>
             {category.name}
-          </option>
+          </button>
         ))}
-      </select>
+      </div>
+      {selectedCategory && (
+        <div>
+          <h3>선택된 카테고리</h3>
+          <p>{selectedCategory.name}</p>
+          <p>코드: {selectedCategory.code}</p>
+        </div>
+      )}
     </div>
   );
 }
