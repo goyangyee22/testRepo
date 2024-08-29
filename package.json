@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@grapecity/spread-sheets": "^17.1.4",
     "csvtojson": "^2.0.10",
     "timers-browserify": "^2.0.12"
   }
