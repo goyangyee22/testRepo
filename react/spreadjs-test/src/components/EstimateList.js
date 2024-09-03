@@ -23,8 +23,10 @@ const EstimateList = () => {
       <ul>
         {estimates.map((estimate, index) => (
           <li key={index}>
-            {estimate.id}: {estimate.item} - {estimate.quantity} @{" "}
-            {estimate.price}
+            견적 아이디: {estimate.id}, <br />
+            견적 물품: {estimate.item}, <br />
+            {estimate.quantity}(수량) * {estimate.price}(가격) ={" "}
+            {estimate.quantity * estimate.price}
           </li>
         ))}
       </ul>
