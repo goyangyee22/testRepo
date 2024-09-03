@@ -13,7 +13,7 @@ const EstimateList = () => {
     const ws = XLSX.utils.json_to_sheet(estimates);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Estimates");
-    XLSX.writeFile(wb, "estimates.xlsx");
+    XLSX.writeFile(wb, "견적서.xlsx");
   };
 
   return (
