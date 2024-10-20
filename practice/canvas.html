@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문서 제목</title>
+</head>
+<body>
+	<canvas id="canvas" width="500" height="300">
+		해당 브라우저에서는 지원하지 않습니다.
+	</canvas>
+
+	<script type="text/javascript">
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext('2d');
+		ctx.beginPath();
+        ctx.moveTo(50, 50);
+		ctx.lineTo(100, 50);
+		ctx.lineTo(100, 100);
+		ctx.lineTo(50, 100);
+		ctx.closePath();
+		ctx.stroke();
+	</script>
+
+</body>
