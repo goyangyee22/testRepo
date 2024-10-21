@@ -7,20 +7,35 @@
     <title>문서 제목</title>
 </head>
 <body>
-	<canvas id="canvas" width="500" height="300">
-		해당 브라우저에서는 지원하지 않습니다.
-	</canvas>
+	<!-- canvas 참고사항
+	1. canvas는 id 값으로 접근한다.
+	2. canvas의 크기는 반드시 canvas 태그 내에 설정
+	=> CSS 사용 시 화면 왜곡 및 깨짐 발생
+	3. canvas의 너비, 높이는 canvas.width, canvas.height로 취득 가능 
+	-->
+<!-- 1. HTML에 <canvas> 태그를 생성합니다. -->
+	<canvas id="canvas" width="300" height="300">해당 브라우저에서는 지원하지 않습니다.</canvas>
 
 	<script type="text/javascript">
+		// 2. 캔버스 객체를 생성합니다.
 		var canvas = document.getElementById("canvas");
-		var ctx = canvas.getContext('2d');
+		// 3. 캔버스 컨텍스트 객체를 생성합니다.
+		var ctx = canvas.getContext("2d");
+
+		// 4. 새로운 경로를 생성합니다.
 		ctx.beginPath();
-        ctx.moveTo(50, 50);
+		// 5. 그림을 그리는 메서드를 이용하여 캔버스에 그림을 그려줍니다.
+		// 위치 이동
+		ctx.moveTo(50, 50);
+		// 현재 위치를 기준으로 해당 위치로 그리면서 이동
 		ctx.lineTo(100, 50);
+		// 현재 위치를 기준으로 해당 위치로 그리면서 이동
 		ctx.lineTo(100, 100);
+		// 현재 위치를 기준으로 해당 위치로 그리면서 이동
 		ctx.lineTo(50, 100);
+		// 6. 경로를 종료합니다.
 		ctx.closePath();
+		// 7. 그려진 경로의 출력 방법을 설정합니다.
 		ctx.stroke();
 	</script>
-
 </body>
