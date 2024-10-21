@@ -36,6 +36,7 @@ Papa.parse(path, {
             options: {
                 scales: {
                     y: {
+                        // beginAtZero의 값이 true인 경우 데이터가 0 밑의 값으로 내려가지 않습니다.
                         beginAtZero: true,
                     }
                 }
