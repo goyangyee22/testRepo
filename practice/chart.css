@@ -1,0 +1,10 @@
+body{
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+canvas {
+    padding: 32px;
+    margin: 0 auto;
+    border: 2px solid black;
+}
