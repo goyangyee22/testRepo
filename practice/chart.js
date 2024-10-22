@@ -12,7 +12,9 @@ Papa.parse(path, {
         const fertilityData = years.map(year => results.data[1][year]);
 
         const ctx = document.getElementById("chart").getContext("2d");
-        new Chart(ctx, {
+
+        // Chart.defaults.borderColor = "#712";
+        const myChart = new Chart(ctx, {
             type: "line",
             data: {
                 labels: years,
@@ -35,12 +37,29 @@ Papa.parse(path, {
             },
             options: {
                 scales: {
-                    y: {
-                        // beginAtZero의 값이 true인 경우 데이터가 0 밑의 값으로 내려가지 않습니다.
+                    x: {
+                         // beginAtZero의 값이 true인 경우 데이터가 0 밑의 값으로 내려가지 않습니다.
                         beginAtZero: true,
+                        grid: {
+                            // index가 0(축)인 값만 색깔을 넣습니다. (차트 안의 선들을 제거합니다.)
+                            color: (ctx) => (ctx.index === 0 ? "#712" : "transparent"),
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: function (context) {
+                                if (context.tick.value === 0) {
+                                    return "#712";
+                                }
+                                return "transparent";
+                            }
+                        }
                     }
                 }
             }
         });
+        console.log(results);
+        console.log(myChart);
     }
 });
