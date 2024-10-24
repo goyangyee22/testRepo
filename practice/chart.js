@@ -34,15 +34,15 @@ function parseCSV(csv) {
     datasets.push({
         label: rows[1][0].trim(), // "출생아수(명)"
         data: rows[1].slice(1).map(Number), // 연도별 출생아수
-        borderColor: "#FFD8D9",
+        borderColor: "#4682B4",
         fill: true,
     });
 
-    // 합계출산율에 해당하는 데이터를 넣습니다.
+    // 사망자수에 해당하는 데이터를 넣습니다.
     datasets.push({
-        label: rows[2][0].trim(), // "합계출산율(명)"
+        label: rows[2][0].trim(), // "사망자수(명)"
         data: rows[2].slice(1).map(Number), // 연도별 합계출산율
-        borderColor: "yellowgreen",
+        borderColor: "#32CD32",
         fill: true,
     });
 
@@ -145,33 +145,45 @@ function drawChart(parsedData, labels, maxValue, minValue) {
                 ctx.moveTo(padding, padding);
                 ctx.lineTo(padding, height - padding);
                 ctx.lineTo(width - padding, height - padding);
-                ctx.strokeStyle = '#000';
+                ctx.strokeStyle = '#333';
                 ctx.lineWidth = 1;
                 ctx.stroke();
             }
 
             // 축 라벨 그리기
+            // fillStyle을 먼저 정의하고 fillText를 선언합니다.
             function drawLabels() {
-                ctx.fillStyle = '#000';
                 ctx.textAlign = 'center';
+                ctx.font = 'bold 12px Arial';
+
+                ctx.fillStyle = datasets[0].borderColor; // 출생아수 색상
+                ctx.fillText('● 출생아수(명)', width / 2 - 50, height / 10);
+            
+                ctx.fillStyle = datasets[1].borderColor; // 합계출산율 색상
+                ctx.fillText('● 사망자수(명)', width / 2 + 50, height / 10);
+
+                // x축 라벨(연도) 그리기
                 for (let i = 0; i < labels.length; i++) {
                     const x = padding + xStep * i;
                     const y = height - padding + 20;
+                    ctx.fillStyle = "#000";
                     ctx.fillText(labels[i], x, y);
                 }
 
-                // y축 라벨 그리기
+                // y축 라벨(데이터값) 그리기
+                ctx.fillStyle = '#000';
                 ctx.textAlign = 'right';
+                ctx.font = '8px';
                 const yStep = (maxValue - minValue) / 5;
                 for (let i = 0; i <= 5; i++) {
                     const y = padding + chartHeight - ((yStep * i) / (maxValue - minValue)) * chartHeight;
                     ctx.fillText((minValue + yStep * i).toFixed(0), padding - 10, y + 5);
 
-                    // 가로선 그리기
+                    // 가로선 그리기 (차트의 가독성을 높이기 위하여 가로선을 투명하게 표시하였습니다.)
                     ctx.beginPath();
                     ctx.moveTo(padding, y);
                     ctx.lineTo(width - padding, y);
-                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0)';
                     ctx.lineWidth = 1;
                     ctx.stroke();
                 }
@@ -190,26 +202,30 @@ function drawChart(parsedData, labels, maxValue, minValue) {
                 }
 }
 
-// // 툴팁 표시 (사용하지 않으므로 주석 처리)
-// function showTooltip(event) {
-//     const rect = canvas.getBoundingClientRect();
-//     const mouseX = event.clientX - rect.left;
-//     const mouseY = event.clientY - rect.top;
-//     for (let i = 0; i < datasets[0].data.length; i++) {
-//         const { x, y } = getCanvasCoordinates(0, i);
-//         if (Math.abs(mouseX - x) < 10 && Math.abs(mouseY - y) < 10) {
-//             tooltip.style.left = `${x}px`;
-//             tooltip.style.top = `${y - 30}px`;
-//             tooltip.innerHTML = `연도: ${labels[i]}<br>${datasets[0].label}: ${datasets[0].data[i]}<br>${datasets[1].label}: ${datasets[1].data[i]}`;
-//             tooltip.style.display = 'block';
-//             return;
-//         }
-//     }
-//     tooltip.style.display = 'none';
-// }
+// 툴팁 표시
+// getBoundingClientRect(): 캔버스 요소의 크기와 위치 정보(좌표 변환에 사용, 여기서는 rect라는 변수로 사용됩니다.)
+// mouseX, mouseY: 각각의 마우스 포인터 좌표를 반환 (mouseY 값은 사용중이지 않아서 주석 처리 하였습니다.)
+function showTooltip(event) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    // const mouseY = event.clientY - rect.top;
+    
+    for (let i = 0; i < labels.length; i++) {
+        const { x, y } = getCanvasCoordinates(0, i);
+        // 연도 label x축으로 5 미만 떨어져 있는 y축 라벨을 hover하면 해당 연도에 대한 데이터를 툴팁으로 띄웁니다.
+        if (Math.abs(mouseX - x) < 5) {
+            tooltip.style.left = `${x}px`;
+            tooltip.style.top = `${y - 30}px`;
+            tooltip.innerHTML = `연도: ${labels[i]}<br>${datasets[0].label}: ${datasets[0].data[i]}<br>${datasets[1].label}: ${datasets[1].data[i]}`;
+            tooltip.style.display = 'block';
+            return;
+        }
+    }
+    tooltip.style.display = 'none';
+}
 
 // 애니메이션
-// canvas.addEventListener('mousemove', showTooltip);
+canvas.addEventListener('mousemove', showTooltip);
 startTime = performance.now();
 currentPointIndex = 0;
 progress = 0;
