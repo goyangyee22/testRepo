@@ -60,6 +60,9 @@ const ctx = canvas.getContext("2d");
 const tooltip = document.getElementById("tooltip");
 
 // 크기 설정
+// offsetWidth: border까지 포함된 요소의 너비
+// offsetHeight: border까지 포함된 요소의 높이
+// canvas.width, canvas.height는 실제 픽셀 크기를 설정하는 속성이므로 canvas의 크기를 HTML 요소의 크기와 일치시킵니다.
 const width = (canvas.width = canvas.offsetWidth);
 const height = (canvas.height = canvas.offsetHeight);
 
@@ -124,10 +127,10 @@ function drawChart(parsedData, labels, maxValue, minValue) {
             // 애니메이션 루프
             function animateChart(currentTime) {
                 const elapsedTime = currentTime - startTime;
-                const segmentDuration = animationDuration / (datasets[0].data.length - 1);
+                const segmentDuration = animationDuration / (labels.length - 1);
                 progress = (elapsedTime % segmentDuration) / segmentDuration;
 
-                if (elapsedTime >= segmentDuration * currentPointIndex && currentPointIndex <= datasets[0].data.length - 1) {
+                if (elapsedTime >= segmentDuration * currentPointIndex && currentPointIndex <= labels.length - 1) {
                     currentPointIndex++;
                 }
 
@@ -138,7 +141,7 @@ function drawChart(parsedData, labels, maxValue, minValue) {
                 drawGridLines();
                 datasets.forEach((_, index) => drawSmoothLine(index, progress));
 
-                if (currentPointIndex < datasets[0].data.length - 1 || progress < 1) {
+                if (currentPointIndex < labels.length - 1 || progress < 1) {
                     requestAnimationFrame(animateChart);
                 }
             }
@@ -161,7 +164,7 @@ function drawChart(parsedData, labels, maxValue, minValue) {
                 ctx.font = 'bold 12px Arial';
 
                 ctx.fillStyle = datasets[0].borderColor; // 출생아수 색상
-                ctx.fillText('● 출생아수(명)', width / 2 - 50, height / 10);
+                ctx.fillText(`● 출생아수(명)`, width / 2 - 50, height / 10);
             
                 ctx.fillStyle = datasets[1].borderColor; // 합계출산율 색상
                 ctx.fillText('● 사망자수(명)', width / 2 + 50, height / 10);
@@ -174,12 +177,12 @@ function drawChart(parsedData, labels, maxValue, minValue) {
                     ctx.fillText(labels[i], x, y);
                 }
 
-                // y축 라벨(데이터값) 그리기
+                // y축 라벨(데이터 세트) 그리기
                 ctx.fillStyle = '#000';
                 ctx.textAlign = 'right';
                 ctx.font = '8px';
-                const yStep = (maxValue - minValue) / 5;
-                for (let i = 0; i <= 5; i++) {
+                const yStep = (maxValue - minValue) / labels.length;
+                for (let i = 0; i <= labels.length; i++) {
                     const y = padding + chartHeight - ((yStep * i) / (maxValue - minValue)) * chartHeight;
                     ctx.fillText((minValue + yStep * i).toFixed(0), padding - 10, y + 5);
 
