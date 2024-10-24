@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 데이터 범위 설정
     // datasets가 배열이므로 flatMap을 이용하여 하나의 배열로 만듭니다.
- const maxValue = Math.max(...datasets.flatMap(dataset => dataset.data))
- const minValue = Math.min(...datasets.flatMap(dataset => dataset.data)) - 30028;
+ const maxValue = Math.max(...datasets.flatMap(dataset => dataset.data)) + 10000;
+ const minValue = Math.min(...datasets.flatMap(dataset => dataset.data)) - 10000;
 
         drawChart(parsedData, labels, maxValue, minValue);
     })
@@ -21,38 +21,42 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // CSV를 파싱하는 함수
-// 쉼표로 데이터를 구분합니다. 단, 쉼표 뒤에 공백이 있으면 안 됨
+// 쉼표로 데이터를 구분하여 각 항목에서 공백을 제거합니다.
 function parseCSV(csv) {
     let rows = csv.split("\n").map(row => row.split(","));
 
     // 연도별 데이터를 표시하기 위해 연도를 추출합니다.
     let labels = rows[0].slice(1).map(label => label.trim());
 
+    // 연도에 따른 각 데이터 세트를 저장하는 배열입니다.
     let datasets = [];
 
-    // 출생아수에 해당하는 데이터를 넣습니다.
+    // 출생아수에 해당하는 데이터를 넣습니다. datasets[0]
     datasets.push({
-        label: rows[1][0].trim(), // "출생아수(명)"
-        data: rows[1].slice(1).map(Number), // 연도별 출생아수
+        label: rows[1][0].trim(), 
+        data: rows[1].slice(1).map(Number), 
         borderColor: "#4682B4",
         fill: true,
     });
 
-    // 사망자수에 해당하는 데이터를 넣습니다.
+    // 사망자수에 해당하는 데이터를 넣습니다. datasets[1]
     datasets.push({
-        label: rows[2][0].trim(), // "사망자수(명)"
-        data: rows[2].slice(1).map(Number), // 연도별 합계출산율
+        label: rows[2][0].trim(), 
+        data: rows[2].slice(1).map(Number),
         borderColor: "#32CD32",
         fill: true,
     });
 
-    // 함수 밖에서 데이터를 사용하기 위하여 return 합니다.
+    // 함수 밖에서(label 연도, datasets 데이터 세트) 데이터를 사용하기 위하여 return 합니다.
     return { labels, datasets };
 }
 
 // canvas 설정
 const canvas = document.getElementById("chart");
+
+// 렌더링 할 컨텍스트 타입을 지정합니다.
 const ctx = canvas.getContext("2d");
+
 const tooltip = document.getElementById("tooltip");
 
 // 크기 설정
