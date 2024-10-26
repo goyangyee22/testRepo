@@ -1,3 +1,23 @@
+// canvas 설정
+const canvas = document.getElementById("chart");
+
+// 렌더링 할 컨텍스트 타입을 지정합니다.
+const ctx = canvas.getContext("2d");
+
+const tooltip = document.getElementById("tooltip");
+
+// 크기 설정
+// offsetWidth: border까지 포함된 요소의 너비
+// offsetHeight: border까지 포함된 요소의 높이
+// canvas.width, canvas.height는 실제 픽셀 크기를 설정하는 속성이므로 canvas의 크기를 HTML 요소의 크기와 일치시킵니다.
+const width = (canvas.width = canvas.offsetWidth);
+const height = (canvas.height = canvas.offsetHeight);
+
+// 차트 여백 설정
+const padding = 50;
+const chartWidth = width - padding * 2;
+const chartHeight = height - padding * 2;
+
 document.addEventListener("DOMContentLoaded", () => {
     // fetch 함수를 이용하여 원격 API를 호출합니다.
     // fetch 함수는 첫번째 인자로 URL, 두번째 인자로 옵션 객체를 받고 Promise 타입의 객체를 반환합니다.
@@ -7,15 +27,16 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(response => response.text())
     .then(data => {
         const parsedData = parseCSV(data);
+        console.log(parsedData);
         const labels = parsedData.labels;
         const datasets = parsedData.datasets;
 
     // 데이터 범위 설정
     // datasets가 배열이므로 flatMap을 이용하여 하나의 배열로 만듭니다.
- const maxValue = Math.max(...datasets.flatMap(dataset => dataset.data)) + 10000;
- const minValue = Math.min(...datasets.flatMap(dataset => dataset.data)) - 10000;
+ const maxValue = Math.max(...datasets.flatMap(dataset => dataset.data));
+ const minValue = Math.min(...datasets.flatMap(dataset => dataset.data));
 
-        drawChart(parsedData, labels, maxValue, minValue);
+        drawChart(labels, datasets, maxValue, minValue);
     })
     .catch(error => console.error("Error loading the CSV file: ", error));
 });
@@ -51,29 +72,8 @@ function parseCSV(csv) {
     return { labels, datasets };
 }
 
-// canvas 설정
-const canvas = document.getElementById("chart");
-
-// 렌더링 할 컨텍스트 타입을 지정합니다.
-const ctx = canvas.getContext("2d");
-
-const tooltip = document.getElementById("tooltip");
-
-// 크기 설정
-// offsetWidth: border까지 포함된 요소의 너비
-// offsetHeight: border까지 포함된 요소의 높이
-// canvas.width, canvas.height는 실제 픽셀 크기를 설정하는 속성이므로 canvas의 크기를 HTML 요소의 크기와 일치시킵니다.
-const width = (canvas.width = canvas.offsetWidth);
-const height = (canvas.height = canvas.offsetHeight);
-
-// 차트 여백 설정
-const padding = 50;
-const chartWidth = width - padding * 2;
-const chartHeight = height - padding * 2;
-
 // 차트 그리기 (초기화 및 애니메이션 시작)
-function drawChart(parsedData, labels, maxValue, minValue) {
-    const datasets = parsedData.datasets; // 모든 데이터셋 사용
+function drawChart(labels, datasets, maxValue, minValue) {
             const xStep = chartWidth / (labels.length - 1);
             let progress = 0;
             const animationDuration = 2000; // 애니메이션 지속 시간 (밀리초)
@@ -88,19 +88,20 @@ function drawChart(parsedData, labels, maxValue, minValue) {
                 return { x, y };
             }
 
-            // // 라인 그리기 (부드러운 라인 그리기로 대체하여 사용하지 않으므로 주석 처리)
-            // function drawLine() {
+            // 라인 그리기 (부드러운 라인 그리기로 대체하여 사용하지 않으므로 주석 처리)
+            // function drawLine(datasetIndex) {
             //     ctx.beginPath();
-            //     ctx.moveTo(getCanvasCoordinates(0).x, getCanvasCoordinates(0).y);
-            //     for (let i = 1; i < data.length; i++) {
-            //         ctx.lineTo(getCanvasCoordinates(i).x, getCanvasCoordinates(i).y);
+            //     ctx.moveTo(getCanvasCoordinates(datasetIndex, 0).x, getCanvasCoordinates(datasetIndex, 0).y);
+            //     for (let i = 1; i < labels.length; i++) {
+            //         const { x, y } = getCanvasCoordinates(datasetIndex, i);
+            //         ctx.lineTo(x, y);
             //     }
-            //     ctx.strokeStyle = 'rgba(75, 192, 192, 1)';
+            //     ctx.strokeStyle = datasets[datasetIndex].borderColor;
             //     ctx.lineWidth = 2;
             //     ctx.stroke();
             // }
             
-            // 부드러운 라인 그리기(애니메이션)
+            // 부드러운 라인 그리기 (애니메이션 효과로 사용하지 않으므로 주석 처리)
             function drawSmoothLine(datasetIndex, animatedProgress) {
                 // const data = datasets[datasetIndex].data;
                 ctx.beginPath();
@@ -124,7 +125,7 @@ function drawChart(parsedData, labels, maxValue, minValue) {
                 ctx.stroke();
             }
 
-            // 애니메이션 루프
+            // 애니메이션 루프 (사용하지 않으므로 주석 처리)
             function animateChart(currentTime) {
                 const elapsedTime = currentTime - startTime;
                 const segmentDuration = animationDuration / (labels.length - 1);
@@ -182,7 +183,7 @@ function drawChart(parsedData, labels, maxValue, minValue) {
                 ctx.textAlign = 'right';
                 ctx.font = '8px';
                 const yStep = (maxValue - minValue) / labels.length;
-                for (let i = 0; i <= labels.length; i++) {
+                for (let i = 0; i < labels.length; i++) {
                     const y = padding + chartHeight - ((yStep * i) / (maxValue - minValue)) * chartHeight;
                     ctx.fillText((minValue + yStep * i).toFixed(0), padding - 10, y + 5);
 
