@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>strokeRect</title>
+</head>
+<body>
+    <canvas id="canvas" width="500" height="300">해당 브라우저에서는 지원하지 않습니다.</canvas>
+    <script type="text/javascript">
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        // 사각형 그리기
+        // ctx.strokeRect(50, 50, 150, 150);
+
+        // 사각형 그리기
+        // ctx.beginPath();
+        // ctx.moveTo(50, 50);
+        // ctx.lineTo(100, 50);
+        // ctx.lineTo(100, 100);
+        // ctx.lineTo(50, 100);
+        // ctx.lineTo(50, 50);
+        // ctx.stroke();
+
+        // 삼각형 그리기
+        // ctx.beginPath();
+        // ctx.moveTo(100, 25);
+        // ctx.lineTo(175, 175);
+        // ctx.lineTo(25, 175);
+        // ctx.lineTo(100, 25);
+        // ctx.stroke();
+
+        // 원 그리기
+        // ctx.beginPath();
+        // ctx.arc(100, 100, 75, 0, 2*Math.PI, true);
+        // ctx.stroke();
+
+        // 반원 그리기
+        // ctx.beginPath();
+        // ctx.arc(100, 100, 75, 180*Math.PI/180, 360*Math.PI/180, false);
+        // ctx.fill();
+
+        // 부채꼴 그리기
+        // ctx.beginPath();
+        // ctx.moveTo(100, 100);
+        // ctx.arc(100, 100, 75, 0, 90*Math.PI/180, true);
+        // ctx.closePath();
+        // ctx.fill();
+    </script>
+</body>
+</html>
