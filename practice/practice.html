@@ -3,25 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>엘리바이저 실습 전 급하게 연습하기 200240507하는중</title>
+    <title>엘리바이저 실습 전 급하게 연습하기 20240507하는중</title>
 </head>
 <body>
     <script>
-        document.write(`<hr>`);
-        for(let i = 1; i <= 5; i++) {
-            for(let j = 1; j <= 5; j++) {
-                document.write(`*`);
-            }
-            document.write(`<br>`);
+   document.write(`<h1>&lt;break&gt;</h1>`);
+   for(let i = 0; i < 10; i++) {
+    if (i == 3) {
+        break;
+    }
+    document.write(`<h3>${i}</h3>`);
+   }
+   document.write(`<hr>`);
+   let j = 0;
+   while (true) {
+    document.write(`<h3>${j}</h3>`);
+    j++;
+    if(j == 5) {
+        break;
+    }
+   }
+   document.write(`<hr>`);
+   document.write(`<h1>&lt;continue&gt;</h1>`);
+   for(let i = 0; i < 10; i++){
+    if(i == 3) {
+        continue;
+    }
+    document.write(`<h3>${i}</h3>`);
+}
+document.write(`<hr>`);
+    let stage = 0;
+    while (true) {
+        document.write(`<h3>${stage}스테이지</h3>`);
+        stage++;
+        if (stage == 5) {
+            continue;
         }
-        document.write(`<hr>`);
-        for(let i = 1; i <= 5; i++) {
-            for(let j = 1; j <= i; j++) {
-                document.write(`*`);
-            }
-            document.write(`<br>`);
+        if (stage >= 11) {
+            break;
         }
-        document.write(`<hr>`);
+    }
+    for (let i = 1; i <= 10; i++) {
+        if (i % 2 == 1) {
+            continue;
+        }
+        document.write(`<h2>${i}</h2>`);
+    }
     </script>
 </body>
 </html>
