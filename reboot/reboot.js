@@ -36,8 +36,6 @@ function parseCSV(csv) {
         fill: true,
     })
 
-    console.log(datasets);
-
     return { labels, datasets };
 }
 
@@ -65,7 +63,8 @@ function drawChart(labels, datasets, maxValue, minValue) {
             ctx.fillStyle = dataset.borderColor;
             
             for(let i = 0; i < labels.length; i++) {
-                const { x, y, height} = getCanvasCoordinates(0, i);
+                const { x, y, height } = getCanvasCoordinates(0, i);
+                console.log(`x: `, x,`y: `, y,`height: `, height);
                 ctx.fillRect(x + 5, y, barWidth, height);
             }
         })
@@ -92,7 +91,9 @@ function drawChart(labels, datasets, maxValue, minValue) {
     }
 
     function showTooltip(event) {
+        // getBoundingClientRect(): 상대적 위치 정보를 제공하는 DOMRect 객체 반환
         const rect = canvas.getBoundingClientRect();
+        // client는 마우스 위치정보가 담긴 객체 속성
         const mouseX = event.clientX - rect.left;
 
         for(let i = 0; i < labels.length; i++){
