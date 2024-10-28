@@ -9,6 +9,7 @@ const padding = 50;
 const chartWidth = width - padding * 2;
 const chartHeight = height - padding * 2;
 
+// 1. DOM을 로드하여 데이터를 가져오기
 document.addEventListener("DOMContentLoaded", () => {
     fetch("reboot.csv")
     .then(response => response.text())
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 })
 
+// 2. CSV 파싱
 function parseCSV(csv) {
     let rows = csv.split("\n").map(row => row.split(","));
     let labels = rows[0].slice(1).map(label => label.trim());
@@ -39,9 +41,10 @@ function parseCSV(csv) {
     return { labels, datasets };
 }
 
+// 그래프를 그리는 함수
 function drawChart(labels, datasets, maxValue, minValue) {
-    const barWidth = chartWidth / (labels.length) - 10;
-    const xStep = chartWidth / labels.length;
+    const barWidth = chartWidth / labels.length / 2;
+    const xStep = barWidth * 2;
 
     function getCanvasCoordinates(datasetIndex, index) {
         const data = datasets[datasetIndex].data;
@@ -77,7 +80,7 @@ function drawChart(labels, datasets, maxValue, minValue) {
         ctx.fillText(`매출(단위: 억)`, width / 2, height / 10);
 
         for(let i = 0; i < labels.length; i++) {
-            const x = padding + xStep * i + barWidth / 2;
+            const x = padding + xStep * i + (xStep/ 2);
             const y = height - padding + 20;
             ctx.fillStyle = `#000`;
             ctx.fillText(labels[i], x, y);
@@ -86,7 +89,7 @@ function drawChart(labels, datasets, maxValue, minValue) {
         const yStep = (maxValue - minValue) / labels.length;
         for(let i = 0; i <= labels.length; i++) {
             const y = padding + chartHeight - ((yStep * i) / (maxValue - minValue)) * chartHeight;
-            ctx.fillText((minValue + yStep * i).toFixed(0), padding - 20, y);
+            ctx.fillText((minValue + yStep * i).toFixed(0), padding - 25, y);
         }
     }
 
@@ -98,10 +101,10 @@ function drawChart(labels, datasets, maxValue, minValue) {
 
         for(let i = 0; i < labels.length; i++){
             const { x, y } = getCanvasCoordinates(0, i);
-            if(Math.abs(mouseX - x) < 5) {
+            if(mouseX >= (x + (xStep / 2) - (barWidth / 2)) && mouseX <= (x + (xStep / 2) + (barWidth / 2))) {
                 tooltip.style.left = `${x}px`;
-                tooltip.style.top = `${y - 30}px`;
-                tooltip.innerHTML = `${labels[i]}년: ${datasets[0].data[i]}(억)`
+                tooltip.style.top = `${y + 100}px`;
+                tooltip.innerHTML = `${labels[i]}년 매출: ${datasets[0].data[i]}(억)`
                 tooltip.style.display = "block";
                 return;
             }
