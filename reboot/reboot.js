@@ -68,7 +68,7 @@ function drawChart(labels, datasets, maxValue, minValue) {
             for(let i = 0; i < labels.length; i++) {
                 const { x, y, height } = getCanvasCoordinates(0, i);
                 console.log(`x: `, x,`y: `, y,`height: `, height);
-                ctx.fillRect(x + 5, y, barWidth, height);
+                ctx.fillRect(x + xStep / 2 / 2, y, barWidth, height);
             }
         })
     }
